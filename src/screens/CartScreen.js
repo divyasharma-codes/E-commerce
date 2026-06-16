@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../redux/store';
@@ -16,15 +16,19 @@ const COLORS = {
 export default function CartScreen({ navigation }) {
   const cart = useSelector(state => state.cart?.items || []);
   const dispatch = useDispatch();
-  const [selectedItems, setSelectedItems] = useState(cart.map(item => item.id));
+  
+  // FIX: useEffect se selectedItems update karo, direct map nahi
+  const [selectedItems, setSelectedItems] = useState([]);
+  
+  useEffect(() => {
+    setSelectedItems(cart.map(item => item.id));
+  }, [cart]);
 
-  // YAHI CHECK ADD KIYA HAI - CART KHALI HAI TO YE DIKHA DE
+  // EMPTY CART CHECK - YE UPAR HI RAHEGA
   if (cart.length === 0) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
         <StatusBar barStyle="dark-content" />
-        
-        {/* HEADER SAME RAHEGA */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={24} />
@@ -34,8 +38,6 @@ export default function CartScreen({ navigation }) {
             <Ionicons name="heart-outline" size={24} />
           </TouchableOpacity>
         </View>
-
-        {/* EMPTY CART MESSAGE */}
         <View style={styles.emptyContainer}>
           <Text style={{ fontSize: 60, marginBottom: 20 }}>🛒</Text>
           <Text style={styles.emptyText}>No product have been added</Text>
@@ -46,7 +48,7 @@ export default function CartScreen({ navigation }) {
 
   const toggleSelect = (id) => {
     if (selectedItems.includes(id)) {
-      setSelectedItems(selectedItems.filter(x => x !== id));
+      setSelectedItems(selectedItems.filter(x => x!== id));
     } else {
       setSelectedItems([...selectedItems, id]);
     }
@@ -73,13 +75,11 @@ export default function CartScreen({ navigation }) {
   };
 
   const total = cart.filter(item => selectedItems.includes(item.id))
-    .reduce((sum, item) => sum + (Math.round(item.price * 80) * item.quantity), 0);
+   .reduce((sum, item) => sum + (Math.round(item.price * 80) * item.quantity), 0);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar barStyle="dark-content" />
-      
-      {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} />
@@ -91,7 +91,6 @@ export default function CartScreen({ navigation }) {
       </View>
 
       <ScrollView>
-        {/* DELIVERY INFO */}
         <View style={styles.deliveryBox}>
           <View style={styles.deliveryRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
@@ -110,12 +109,10 @@ export default function CartScreen({ navigation }) {
           </View>
         </View>
 
-        {/* DESELECT ALL */}
         <TouchableOpacity onPress={toggleSelectAll}>
           <Text style={styles.deselectText}>Deselect all items</Text>
         </TouchableOpacity>
 
-        {/* CART ITEMS */}
         {cart.map(item => {
           const price = Math.round(item.price * 80);
           const mrp = Math.round(item.price * 100);
@@ -145,7 +142,7 @@ export default function CartScreen({ navigation }) {
 
                 <View style={styles.qtyBox}>
                   <TouchableOpacity onPress={() => decreaseQty(item)} style={styles.qtyBtn}>
-                    {item.quantity === 1 ? 
+                    {item.quantity === 1? 
                       <Ionicons name="trash-outline" size={16} color={COLORS.gray} /> : 
                       <Text style={styles.qtyText}>-</Text>
                     }
@@ -161,7 +158,6 @@ export default function CartScreen({ navigation }) {
         })}
       </ScrollView>
 
-      {/* PROCEED BUTTON */}
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.proceedBtn}>
           <Text style={styles.proceedText}>Proceed to pay</Text>
@@ -182,8 +178,6 @@ const styles = StyleSheet.create({
     borderColor: '#F3F4F6'
   },
   headerTitle: { fontSize: 18, fontWeight: '600' },
-  
-  // YE 2 STYLE NAYE ADD KIYE HAIN EMPTY KE LIYE
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -195,16 +189,13 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     fontWeight: '500'
   },
-  
   deliveryBox: { padding: 16, borderBottomWidth: 1, borderColor: '#F3F4F6' },
   deliveryRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   deliveryText: { fontSize: 14, fontWeight: '600', color: COLORS.black },
   addressText: { fontSize: 12, color: COLORS.gray, marginTop: 2 },
   freeDeliveryRow: { flexDirection: 'row', alignItems: 'center' },
   freeDeliveryText: { fontSize: 12, color: COLORS.blue, fontWeight: '500' },
-  
   deselectText: { paddingHorizontal: 16, paddingVertical: 12, fontSize: 13, color: COLORS.blue, fontWeight: '500' },
-  
   cartItem: { 
     flexDirection: 'row', 
     padding: 16, 
@@ -241,7 +232,6 @@ const styles = StyleSheet.create({
   price: { fontSize: 16, fontWeight: '700', marginRight: 8 },
   mrp: { fontSize: 13, color: COLORS.gray, textDecorationLine: 'line-through' },
   tryBuy: { fontSize: 11, color: COLORS.blue, fontWeight: '600', marginBottom: 8 },
-  
   qtyBox: { 
     flexDirection: 'row', 
     alignItems: 'center', 
@@ -256,7 +246,6 @@ const styles = StyleSheet.create({
   qtyBtn: { padding: 4 },
   qtyText: { fontSize: 18, fontWeight: '600', color: COLORS.black },
   qtyNumber: { fontSize: 14, fontWeight: '600' },
-  
   bottomBar: {
     padding: 16,
     borderTopWidth: 1,
