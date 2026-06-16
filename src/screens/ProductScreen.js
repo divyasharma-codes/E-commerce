@@ -225,7 +225,7 @@ export default function ProductsScreen({ navigation }) {
 const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop:50, borderBottomWidth: 1, borderColor: '#F3F4F6' },
-  searchHeader: { flexDirection: 'row', alignItems: 'center', padding: 16, backgroundColor: COLORS.white, gap: 12, borderBottomWidth: 1, borderColor: '#F3F4F6' },
+  searchHeader: { flexDirection: 'row', alignItems: 'center', padding: 16,paddingTop:50, backgroundColor: COLORS.white, gap: 12, borderBottomWidth: 1, borderColor: '#F3F4F6' },
   searchInput: { flex: 1, backgroundColor: COLORS.lightGray, borderRadius: 8, paddingHorizontal: 12, height: 40 },
   headerTitle: { fontSize: 18, fontWeight: '600', marginLeft: 8 },
   headerRight: { flexDirection: 'row', alignItems: 'center' },
