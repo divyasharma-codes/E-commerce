@@ -18,6 +18,32 @@ export default function CartScreen({ navigation }) {
   const dispatch = useDispatch();
   const [selectedItems, setSelectedItems] = useState(cart.map(item => item.id));
 
+  // YAHI CHECK ADD KIYA HAI - CART KHALI HAI TO YE DIKHA DE
+  if (cart.length === 0) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+        <StatusBar barStyle="dark-content" />
+        
+        {/* HEADER SAME RAHEGA */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Bag</Text>
+          <TouchableOpacity>
+            <Ionicons name="heart-outline" size={24} />
+          </TouchableOpacity>
+        </View>
+
+        {/* EMPTY CART MESSAGE */}
+        <View style={styles.emptyContainer}>
+          <Text style={{ fontSize: 60, marginBottom: 20 }}>🛒</Text>
+          <Text style={styles.emptyText}>No product have been added</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   const toggleSelect = (id) => {
     if (selectedItems.includes(id)) {
       setSelectedItems(selectedItems.filter(x => x !== id));
@@ -156,6 +182,19 @@ const styles = StyleSheet.create({
     borderColor: '#F3F4F6'
   },
   headerTitle: { fontSize: 18, fontWeight: '600' },
+  
+  // YE 2 STYLE NAYE ADD KIYE HAIN EMPTY KE LIYE
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 100
+  },
+  emptyText: {
+    fontSize: 18,
+    color: COLORS.gray,
+    fontWeight: '500'
+  },
   
   deliveryBox: { padding: 16, borderBottomWidth: 1, borderColor: '#F3F4F6' },
   deliveryRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
