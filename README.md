@@ -20,6 +20,9 @@ A fully functional E-commerce mobile app built with React Native + Expo. Include
 - **Icons**: @expo/vector-icons
 - **Language**: JavaScript
 
+## Download APK :
+    https://expo.dev/accounts/divyasharma_00/projects/E-commerce/builds/a276a646-a2f7-42d9-bd55-a868cd8dab79
+
 ## 🚀 How to Run
 
 ```bash
